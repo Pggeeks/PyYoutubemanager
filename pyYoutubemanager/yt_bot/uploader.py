@@ -1,6 +1,5 @@
 ### see the working in sampletest file !!###
 import os
-from pydoc import text
 from selenium import webdriver
 from chome_debugger_host import Chrome_deb_mode
 from XP_conf import *
@@ -27,7 +26,7 @@ class upload:
             self.driver.find_element(
                 By.XPATH, self.fxPath).send_keys(f"{self.file_Path}")
             self.driver.implicitly_wait(4)
-        except:
+        except Exception:
             print('path error retrying')
             # if the path have forward or backslash problems it will correct it as per the system
             abb = os.path.normpath(self.file_Path)
@@ -40,7 +39,7 @@ class upload:
         try:
             self.driver.implicitly_wait(10)
             self.driver.find_element(By.ID, "file-loader").send_keys(Thumb_Path)
-        except:
+        except Exception:
             print('Error ,Add a proper thumbnail path')
 
 ###  nested fuction for Details ie. title , description, listed type ###
@@ -50,7 +49,7 @@ class upload:
                 self.driver.implicitly_wait(4)
                 self.driver.find_element(
                     By.ID, "title-textarea").send_keys(title)
-            except:
+            except Exception:
                 self.driver.implicitly_wait(5)
                 self.driver.find_element(
                     By.ID, "title-textarea").send_keys(title)
@@ -58,9 +57,9 @@ class upload:
         def Description(des):
             try:
                 self.driver.implicitly_wait(4)
-                text_element =self.driver.find_element(By.XPATH, XPATH_DESCRIPTION).send_keys(des)
-                
-            except:
+                self.driver.find_element(By.XPATH, XPATH_DESCRIPTION).send_keys(des)
+
+            except Exception:
                 self.driver.implicitly_wait(5)
                 self.driver.find_element(
                     By.XPATH, XPATH_DESCRIPTION).send_keys(des)
@@ -93,5 +92,6 @@ class upload:
             Listed(Prv, Unl)
             # click the last submit btn
             self.driver.find_element(By.ID, "done-button").click()
+            print('Video uploded Sucssesfully you may Close This App')
 
 ### nested function ends here. ###

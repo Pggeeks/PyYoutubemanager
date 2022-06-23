@@ -1,8 +1,10 @@
-### see the working in sampletest file !!###
-# close any other chrome browser working because this file opens chrome in your looged in session
-# at the localhost which will interfare the working
-# opens  chrome in debugger mode by default
-# pass option = False in upload to disable it
+'''
+•see the working in sampletest file !!
+•close any other chrome browser working because this file opens chrome in your looged in session
+•at the localhost which will interfare the working
+•opens  chrome in debugger mode by default
+•pass option = False in upload to disable it
+'''
 import os
 from threading import Thread
 from XP_conf import CHROMEDEB_PATH

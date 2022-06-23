@@ -23,6 +23,3 @@ class YTdownload:
         except Exception:
             print("Some Error!")
             return None
-
-        print('Task Completed!')
-        # returns path of the saved video
