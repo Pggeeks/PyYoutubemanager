@@ -52,13 +52,17 @@ The useable File is main.py
 python main.py --help
 ```
 •Please refer to commands given in image below.
+
 ![help](https://user-images.githubusercontent.com/82941619/175384814-db4af66c-54b2-4988-816f-03e8d68e27aa.png)
+
 ```
 python main.py redditupload
 ```
 ![upload](https://user-images.githubusercontent.com/82941619/175384938-f8251a18-2015-4e43-8ece-e41917ab042c.png)
+
 • Example of selenium opeaing and uploading video and asking for value such title and credits
 • **For Description there is a file named Description.txt please paste description there.**
+
 ![sucsess](https://user-images.githubusercontent.com/82941619/175384886-02b9fe7d-afeb-4abc-9f14-8cf64d65910d.png)
 **Youtube video on this project** :- https://youtu.be/uwquswT7jBg
 <!-- CONTRIBUTING -->
@@ -67,7 +71,11 @@ Contributions are what make the open source community such an amazing place to l
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 **Like my Work Please Consider a Follow**
-
+## Bug
+Please use chrome version 103 above or below.
+There is a bug when working with chrome version 103 and selenium.
+which cause issue in automation we have fully investigate the issue and there is no problem from our side.
+Sorry for inconvenience
 <!-- CONTACT -->
 ## Contact
 
