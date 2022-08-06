@@ -9,4 +9,4 @@ CHROMEDEB_PATH = "C:\\Program Files\\Google\\Chrome\\Application"
 ### all the Xpaths are here and ids are in the main file!
 UPLOAD_XPATH = "/html/body/ytcp-app/ytcp-entity-page/div/div/main/div/ytcp-animatable[2]/div[1]/ytcp-quick-actions/a[1]/ytcp-icon-button/tp-yt-iron-icon"
 SELECT_FILEX = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-uploads-file-picker/div/input"
-XPATH_DESCRIPTION = '''//div[@aria-label="Tell viewers about your video (type @ to mention a channel)"]'''
+XPATH_DESCRIPTION = '''//div[@aria-label="Tell viewers about your video"]'''
