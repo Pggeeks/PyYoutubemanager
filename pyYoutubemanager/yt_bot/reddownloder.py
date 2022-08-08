@@ -105,7 +105,7 @@ class Download:
             self.CleanUp()
         except:
             print('video has no sound')
-            self.CleanUp(True)
+            self.CleanUp()
         return f"{self.output}.mp4"
 
     def CleanUp(self):
