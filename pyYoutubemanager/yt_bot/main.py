@@ -1,29 +1,40 @@
-import typer
-from download import YTdownload
-from uploader import upload
-from reddownloder import Download
 import os
+
+import typer
+from rich import print
+
+from download import YTdownload
+from reddownloder import Download
+from uploader import upload
+
 app = typer.Typer(add_completion=False,
-    help='''
-    ############################################################################
-    • Welcome To Youtube Manager New To The App Check XP_conf.py File First\n 
-    • Upload Videos to Youtube With Description,Title,Credits,Thumbnail Of your own Choice and much more. \n 
-    • Download Them From Various Sources\n
-    ############################################################################
-    '''
+    help= typer.secho('''
+    • Welcome To Youtube Manager New To The App Check XP_conf.py File First.
+    • Upload Videos to Youtube With Description,Title,Credits,Thumbnail Of your own Choice and much more.
+    • Download Video from Reddit,Youtube,Local Storage.
+    • --addtext | Display the Giving Text on Top Left Of the Video for 8 seconds. currently supported only for \n      redditupload / use [command] --addtext
+    ''', fg=typer.colors.BRIGHT_YELLOW)
     )
 
 def info(videoadd):
     upload_obj = upload(videoadd)
     upload_obj.send()
-    thumbnail_or_not = input('wanna add a thumbnail? press Y/N \n').lower()
+    print('[bold red]Alert![/bold red] [yellow]Want to add a thumbnail? press Y/N:-[/yellow]')
+    thumbnail_or_not = input('').lower()
     if thumbnail_or_not == "y":
-        thumbpath = input('paste the thumbnail absolute path \n')
+        print('[bold red]Alert![/bold red] [yellow]Paste the absolute path of Thumbnail:-[/yellow]')
+        thumbpath = input('')
         upload_obj.Thumbnail(str(thumbpath))
-    Title = input(' Add a Video Title \n')
-    Clip_Credit = input('Add a Clip Credit \n')
-    des = open(f'{os.path.dirname(__file__)}/../mydescription.txt',
+    print('[bold red]Alert![/bold red] [yellow] Input a Video Title:-[/yellow]')
+    Title = input('')
+    print('[bold red]Alert![/bold red] [yellow]Input Clip Credits! Leave this if no credits defined in mydescription.txt:-[/yellow]')
+    Clip_Credit = input('')
+    des = open(f'{os.path.dirname(__file__)}./mydescription.txt',
                'r', encoding='UTF-8').readlines()
+    if Clip_Credit == '' or None:
+        upload_obj.details(D_Tiltle=Title, D_Description=des)
+        exit()
+    ## if credits finds credit word in description and add input there.
     Data_Des = ''
     for Line in des:
         if 'Credits' in Line:
@@ -33,29 +44,34 @@ def info(videoadd):
     upload_obj.details(D_Tiltle=Title, D_Description=Data_Des)
     exit()
 
-
 @app.command(help="Download Video from Reddit and Upload to Youtube")
-def redditupload():
-    typer.echo(
-        "Precaution: Please Close The Chrome Application or any other tabs before using")
-    rl = input(' Add Reddit Video Link:-\n').lower()
-    Download(rl, destination=os.getcwd())
+def redditupload(addtext: bool = typer.Option(False,prompt="want to display Text On Video? mainly used for giving credits?",help="Display the Giving Text on Top Left Of the Video for 8 seconds. currently supported only for reddituploader / use [command] --addtext"),):
+    print("[bold red]Alert![/bold red] [yellow]Precaution: Please Close The Chrome Application or any other tabs before using[/yellow]")
+    print('[bold red]Alert![/bold red] [yellow]Input A Reddit Video Link:-[/yellow]')
+    rl = input('').lower()
+    if addtext:
+        print('[bold red]Alert![/bold red] [yellow]Enter Text You Want To display on video:-[/yellow]')
+        text = input().lower()
+        Download(rl, destination=os.getcwd(),addtext=True,text=text)
+    else:
+        Download(rl, destination=os.getcwd())
     info(os.getcwd()+'\Redditdownloaded.mp4')
+
 
 
 @app.command(help="Upload a Local Video to Youtube")
 def localupload():
-    typer.echo(
-        "Precaution: Please Close The Chrome Application or any other tabs before using")
-    videopath = input('paste the absolute video path \n')
+    print("[bold red]Alert![/bold red] [yellow]Precaution: Please Close The Chrome Application or any other tabs before using[/yellow]")
+    print('[bold red]Alert![/bold red] [yellow]Paste The Absolute Path Of Video[/yellow]')
+    videopath = input('')
     info(videopath)
 
 
 @app.command(help="Download Video from Youtube and Upload to Youtube")
 def youtubeupload():
-    typer.echo(
-        "Precaution: Please Close The Chrome Application or any other tabs before using")
-    videolink = input('Add Youtube Video Link:-\n').lower()
+    print("[bold red]Alert![/bold red] [yellow]Precaution: Please Close The Chrome Application or any other tabs before using[/yellow]")
+    print('[bold red]Alert![/bold red] [yellow]Input Youtube Video Link:-[/yellow]')
+    videolink = input('').lower()
     a = YTdownload(str(videolink))
     videopath = a.Download()
     info(videopath)

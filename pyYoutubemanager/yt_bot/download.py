@@ -16,7 +16,6 @@ class YTdownload:
         try:
             print(Yt.title)
             video = Yt.streams.filter(file_extension='mp4').get_highest_resolution()
-            print(video)
             # remove all the emoji and spaces , symbols
             videopath = video.download(output_path=self.Path, filename=re.sub('[^A-Za-z0-9]+', '_', f'{Yt.title}mp4'))
             return videopath

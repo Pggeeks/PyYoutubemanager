@@ -1,15 +1,18 @@
-import urllib.request
-import moviepy.editor as mpe
-import requests
 import json
 import os
 import shutil
+import urllib.request
+
+import moviepy.editor as mpe
+import requests
 
 
 class Download:
 
-    def __init__(self, url, quality=720, output="Redditdownloaded", destination=None):
+    def __init__(self, url, quality=720, output="Redditdownloaded", destination=None,addtext=False,text=None):
         self.output = output
+        self.addtext=addtext
+        self.text = text
         self.destination = destination
         qualityTypes = [360, 720, 1080]
         if quality not in qualityTypes:
@@ -100,12 +103,18 @@ class Download:
             print(self.destination)
             my_clip = mpe.VideoFileClip(self.destination+"Video.mp4")
             audio_background = mpe.AudioFileClip(self.destination+"Audio.mp3")
+            if self.addtext==True:
+                ### adds text on video of credits
+                txt_clip = mpe.TextClip(self.text.upper(), fontsize = 40,font='Linux-Libertine-G-Semibold' , color = 'white').set_duration(8)
+                txt_clip = txt_clip.set_position((6,12))
+                txt_col = txt_clip.on_color(size=(txt_clip.w + 2, txt_clip.h+5), color=(0,0,0), pos=(6,"center"), col_opacity=0.6)
+                my_clip = mpe.CompositeVideoClip([my_clip,txt_col]) 
             final_clip = my_clip.set_audio(audio_background)
-            final_clip.write_videofile(f"{self.output}.mp4", fps=fps)
+            final_clip.write_videofile(f"{self.output}.mp4", fps=fps,threads=5)
             self.CleanUp()
         except:
             print('video has no sound')
-            self.CleanUp(True)
+            self.CleanUp()
         return f"{self.output}.mp4"
 
     def CleanUp(self):
