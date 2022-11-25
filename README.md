@@ -11,7 +11,7 @@
     <a href="https://github.com/Pggeeks/PyYoutubemanager"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Pggeeks/PyYoutubemanager">View Demo</a>
+    <a href="https://youtu.be/uwquswT7jBg">View Demo</a>
     ·
     <a href="https://github.com/Pggeeks/PyYoutubemanager/issues">Report Bug</a>
     ·
@@ -36,7 +36,11 @@
 * [typer](https://typer.tiangolo.com/)
 
 ### V2 Update
-### Now Pyyoutubemanager is fully Command Line functional using Typer Support.
+### • Now Pyyoutubemanager is fully Command Line functional using Typer Support.
+### V3 update
+### • Add Text Over Videos ( only available in reddituploader) *download from reddit upload to Youtube
+### • New Text and Colorful CLI interface
+### • Fixed minor Bugs
 <!-- GETTING STARTED -->
 ## Getting Started
 Before starting read the XP_configration file for changes like Chrome Path , Chrome driver(They maybe be Different for others)
@@ -45,6 +49,9 @@ Before starting read the XP_configration file for changes like Chrome Path , Chr
 ```
 pip install -r requirements.txt
 ```
+### Requirements if Text Over Video Needed.
+#### [imagemagick](https://imagemagick.org/script/download.php#windows) or https://imagemagick.org/script/download.php
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 The useable File is main.py
@@ -53,12 +60,12 @@ python main.py --help
 ```
 •Please refer to commands given in image below.
 
-![help](https://user-images.githubusercontent.com/82941619/175384814-db4af66c-54b2-4988-816f-03e8d68e27aa.png)
+![help](https://user-images.githubusercontent.com/82941619/203953942-130dbef6-2ff0-448a-9143-ade8e9c3fd6a.png)
 
 ```
 python main.py redditupload
 ```
-![upload](https://user-images.githubusercontent.com/82941619/175384938-f8251a18-2015-4e43-8ece-e41917ab042c.png)
+![upload](https://user-images.githubusercontent.com/82941619/203954079-d05ff996-089b-41a4-a7e4-06aaf8ea38d0.png)
 
 • Example of selenium opeaing and uploading video and asking for value such title and credits
 • **For Description there is a file named Description.txt please paste description there.**
@@ -72,7 +79,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 Don't forget to give the project a star! Thanks again!
 **Like my Work Please Consider a Follow**
 ## Bug
-Please use chrome version 103 above or below.
+Please use chrome version 103 above or below. (all version supported except 103)
 There is a bug when working with chrome version 103 and selenium.
 which cause issue in automation we have fully investigate the issue and there is no problem from our side.
 Sorry for inconvenience
