@@ -44,15 +44,20 @@ def info(videoadd):
     upload_obj.details(D_Tiltle=Title, D_Description=Data_Des)
     exit()
 
+
 @app.command(help="Download Video from Reddit and Upload to Youtube")
-def redditupload(addtext: bool = typer.Option(False,prompt="want to display Text On Video? mainly used for giving credits?",help="Display the Giving Text on Top Left Of the Video for 8 seconds. currently supported only for reddituploader / use [command] --addtext"),):
+def redditupload(addtext: bool = typer.Option(False, prompt="want to display Text On Video? mainly used for giving credits?", help="Display the Giving Text on Top Left Of the Video for 8 seconds. currently supported only for reddituploader / use [command] --addtext"), 
+outro: bool = typer.Option(False, prompt="want to add subcribe please outro at end?")):
     print("[bold red]Alert![/bold red] [yellow]Precaution: Please Close The Chrome Application or any other tabs before using[/yellow]")
     print('[bold red]Alert![/bold red] [yellow]Input A Reddit Video Link:-[/yellow]')
     rl = input('').lower()
-    if addtext:
+    if addtext and outro or addtext:
         print('[bold red]Alert![/bold red] [yellow]Enter Text You Want To display on video:-[/yellow]')
         text = input().lower()
-        Download(rl, destination=os.getcwd(),addtext=True,text=text)
+        Download(rl, destination=os.getcwd(),
+                 addtext=True, text=text, outro_clip=True)
+    elif outro:
+        Download(rl, destination=os.getcwd(), addtext=True,outro_clip=True)
     else:
         Download(rl, destination=os.getcwd())
     info(os.getcwd()+'\Redditdownloaded.mp4')
