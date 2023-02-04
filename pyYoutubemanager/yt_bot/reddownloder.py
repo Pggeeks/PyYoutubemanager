@@ -9,9 +9,10 @@ import requests
 
 class Download:
 
-    def __init__(self, url, quality=720, output="Redditdownloaded", destination=None,addtext=False,text=None):
+    def __init__(self, url, quality=720, output="Redditdownloaded", destination=None,addtext=False,text=None,outro_clip=False):
         self.output = output
-        self.addtext=addtext
+        self.outro_clip = outro_clip
+        self.addtext= addtext
         self.text = text
         self.destination = destination
         qualityTypes = [360, 720, 1080]
@@ -103,16 +104,22 @@ class Download:
             print(self.destination)
             my_clip = mpe.VideoFileClip(self.destination+"Video.mp4")
             audio_background = mpe.AudioFileClip(self.destination+"Audio.mp3")
-            if self.addtext==True:
+            if self.addtext:
                 ### adds text on video of credits
-                txt_clip = mpe.TextClip(self.text.upper(), fontsize = 40,font='Linux-Libertine-G-Semibold' , color = 'white').set_duration(8)
-                txt_clip = txt_clip.set_position((6,12))
-                txt_col = txt_clip.on_color(size=(txt_clip.w + 2, txt_clip.h+5), color=(0,0,0), pos=(6,"center"), col_opacity=0.6)
-                my_clip = mpe.CompositeVideoClip([my_clip,txt_col]) 
+                txt_clip = mpe.TextClip(self.text.upper(), fontsize = 45,font='Linux-Libertine-G-Semibold' , color = 'white')
+                icon = mpe.ImageClip("reddit.png").set_duration(8)
+                icon = icon.set_position((2,9))
+                txt_clip = txt_clip.on_color(size=(txt_clip.w + 2, txt_clip.h+5), color=(0,0,0), pos=(6,"center"), col_opacity=0.6)
+                txt_clip = txt_clip.set_position((60,7)).set_duration(8)
+                my_clip = mpe.CompositeVideoClip([my_clip,txt_clip,icon]) 
+            if self.outro_clip:
+                outro = mpe.TextClip('PLEASE CONSIDER A SUBSCRIBE :)', fontsize = 45,font='Linux-Libertine-G-Semibold' , color = 'white')
+                outro = outro.set_position('center').set_duration(3)
+                my_clip = mpe.CompositeVideoClip([my_clip,outro.set_start(my_clip.duration)]) 
             final_clip = my_clip.set_audio(audio_background)
             final_clip.write_videofile(f"{self.output}.mp4", fps=fps,threads=5)
             self.CleanUp()
-        except:
+        except Exception as e:
             print('video has no sound')
             self.CleanUp()
         return f"{self.output}.mp4"
