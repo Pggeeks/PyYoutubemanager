@@ -1,8 +1,9 @@
+import os
 from pytube import YouTube
 from pathlib import Path
 import re
 class YTdownload:
-    PATH = Path(__file__).parent.absolute() #gets the path of parent directory 
+    PATH = os.getcwd() #gets the path of current directory
 # can also pass your own path as Path=
     def __init__(self, link, Path=PATH):
         self.Path = Path
