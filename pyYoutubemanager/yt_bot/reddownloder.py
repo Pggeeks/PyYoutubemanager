@@ -117,7 +117,7 @@ class Download:
                 outro = outro.set_position('center').set_duration(3)
                 my_clip = mpe.CompositeVideoClip([my_clip,outro.set_start(my_clip.duration)]) 
             final_clip = my_clip.set_audio(audio_background)
-            final_clip.write_videofile(f"{self.output}.mp4", fps=fps,threads=5)
+            final_clip.write_videofile(f"{self.output}.mp4", fps=fps,threads=10)
             self.CleanUp()
         except Exception as e:
             print('video has no sound')
