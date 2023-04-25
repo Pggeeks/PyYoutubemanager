@@ -5,13 +5,13 @@ usage being downloading Reddit Posts i.e Image Posts , Videos , Gifs , Gallery
 Posts with additional support for Youtube links and Imgur Links.
 """
 
+import contextlib
 # Internal Imports | Pre Installed Packages
 import urllib.request
 import json
 import os
 import shutil
 import logging
-
 # External Imports | Required Packages
 from moviepy.editor import *
 import requests
@@ -214,7 +214,7 @@ class Download:
     ):  # Function to download and merge all images in a directory
 
         TotalPosts = len(posts)
-        self.Logger.LogInfo("Total images to be downloaded: " + str(TotalPosts))
+        self.Logger.LogInfo(f"Total images to be downloaded: {TotalPosts}")
         for i in range(TotalPosts):
             self.Logger.LogInfo(f"Downloading image {i+1} / {TotalPosts}")
             ImageData = requests.get(posts[i]).content
@@ -288,54 +288,72 @@ class Download:
     def MergeVideo(self):
         try:
             self.Logger.LogInfo("Merging Files")
-            if self.destination is not None:
-                clip = VideoFileClip(self.destination + "Video.mp4")
+            destination = self.destination
+            output = self.output
+            verbose = self.verbose
+            addtext = self.addtext
+            outro_clip = self.outro_clip
+
+            if destination is not None:
+                clip = VideoFileClip(destination + "Video.mp4")
             else:
                 clip = VideoFileClip("Video.mp4")
-            if self.addtext:
-                ### adds text on video of credits
-                txt_clip = TextClip(self.text.upper(), fontsize = 45,font='Linux-Libertine-G-Semibold' , color = 'white')
+
+            if addtext:
+                # adds text on video of credits
+                txt_clip = TextClip(self.text.upper(), fontsize=45, font='Linux-Libertine-G-Semibold', color='white')
                 icon = ImageClip("reddit.png").set_duration(8)
-                icon = icon.set_position((2,9))
-                txt_clip = txt_clip.on_color(size=(txt_clip.w + 2, txt_clip.h+5), color=(0,0,0), pos=(6,"center"), col_opacity=0.6)
-                txt_clip = txt_clip.set_position((60,7)).set_duration(8)
-                clip = CompositeVideoClip([clip,txt_clip,icon]) 
-            if self.outro_clip:
-                outro = TextClip('PLEASE CONSIDER A SUBSCRIBE :)', fontsize = 45,font='Linux-Libertine-G-Semibold' , color = 'white')
+                icon = icon.set_position((2, 9))
+                txt_clip = txt_clip.on_color(size=(txt_clip.w + 2, txt_clip.h + 5), color=(0, 0, 0), pos=(6, "center"), col_opacity=0.6)
+                txt_clip = txt_clip.set_position((60, 7)).set_duration(8)
+
+            if outro_clip:
+                outro = TextClip('PLEASE CONSIDER A SUBSCRIBE :)', fontsize=45, font='Linux-Libertine-G-Semibold', color='white')
                 outro = outro.set_position('center').set_duration(3)
-                clip = CompositeVideoClip([clip,outro.set_start(clip.duration)]) 
+
+            if self.outro_clip and self.addtext:
+                clip = CompositeVideoClip([clip, txt_clip, icon, outro.set_start(clip.duration)])
+            elif self.addtext:
+                clip = CompositeVideoClip([clip, txt_clip, icon])
+            elif self.outro_clip:
+                clip = CompositeVideoClip([clip, outro.set_start(clip.duration)])
+
             try:
-                if self.destination is not None:
-                    audioclip = AudioFileClip(self.destination + "Audio.mp3")
+                if destination is not None:
+                    audioclip = AudioFileClip(f"{destination}Audio.mp3")
                 else:
                     audioclip = AudioFileClip("Audio.mp3")
-                new_audioclip = CompositeAudioClip([audioclip])
-                clip.audio = new_audioclip
-                try:
-                    if self.destination is not None:
-                        clip.write_videofile(
-                            self.output + ".mp4",
-                            verbose=self.verbose,
-                            logger=None,
-                        )
-                    else:
-                        clip.write_videofile(
-                            self.output + ".mp4", verbose=self.verbose, logger=None
-                        )
-                except Exception as e:
-                    pass
-                self.Logger.LogInfo("Merging Done!")
-                self.CleanUp()
-                self.Logger.LogInfo(self.output + " Successfully Downloaded!")
-                clip.close()
-            except Exception as e:
-                clip.close()
-                self.Logger.LogInfo("Video has no sound")
-                self.CleanUp(True)
-                self.Logger.LogInfo(self.output + " Successfully Downloaded!")
+                clip.audio = audioclip
+            except Exception:
+                self.Logger.LogInfo("Downloading without audio")
+            with contextlib.suppress(Exception):
+                if destination is not None:
+                    clip.write_videofile(
+                        f"{output}.mp4",
+                        threads=5,
+                        preset="ultrafast",
+                        fps=24,
+                        verbose=False,
+                    )
+                else:
+                    clip.write_videofile(
+                        f"{self.output}.mp4",
+                        verbose=self.verbose,
+                        logger=None,
+                        threads=4,
+                        preset='superfast',
+                        ffmpeg_params=['-crf', '18'],
+                    )
+                    print(11)
+            self.Logger.LogInfo("Merging Done!")
+            self.CleanUp()
+            self.Logger.LogInfo(f"{self.output} Successfully Downloaded!")
+            clip.close()
         except Exception as e:
-            self.Logger.LogInfo("Merge Failed!")
-            self.Logger.LogInfo(e)
+            clip.close()
+            self.Logger.LogInfo("Video has no sound")
+            self.CleanUp(True)
+            self.Logger.LogInfo(f"{self.output} Successfully Downloaded!")
 
     # Function to remove the unnecessary files as well as temporary
     # directories and files
